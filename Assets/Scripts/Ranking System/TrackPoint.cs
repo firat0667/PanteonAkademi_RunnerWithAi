@@ -31,6 +31,7 @@ public class TrackPoint : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         SetPosition();
         SetActiveWaypoint();
 

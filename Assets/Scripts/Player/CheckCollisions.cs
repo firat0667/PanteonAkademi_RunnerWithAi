@@ -15,11 +15,17 @@ public class CheckCollisions : MonoBehaviour
 	public static CheckCollisions Instance;
 	[HideInInspector]
 	public int RunnerWinAmount;
-	private void Start()
+	public int count;
+    private void Awake()
+    {
+        
+    }
+    private void Start()
     {
 		StartPos = new Vector3(transform.position.x,transform.position.y,transform.position.z);
 		Instance = this;
 		RunnerWinAmount = (rankManager.txtRanks.Length / 2);
+		count = PlayerPrefs.GetInt("Count");
     }
 
     public void RestartGame()
@@ -37,22 +43,8 @@ public class CheckCollisions : MonoBehaviour
 		*/
 		if (other.tag==Tags.Finish_tag)
 		{
-			FinishScript finishScript = other.gameObject.GetComponent<FinishScript>();
-			playerController.runningSpeed = 0f;
-		//	playerController.PlayerAnim.SetBool("win", true);
-			transform.Rotate(transform.rotation.x, 180, transform.rotation.z, Space.Self);
-			RestartPanel.SetActive(true);
-            if (finishScript.RunnerValue<= RunnerWinAmount)
-            {
-				PlayerAnim.SetBool("Win", true);
-				PlayerAnim.SetBool("Run", false);
-            }
-            else
-            {
 
-				PlayerAnim.SetBool("Lose", true);
-				PlayerAnim.SetBool("Run", false);
-			}
+			PlayerFinish(other.gameObject);
 			/*
 			if (collectCoin.score >= 54)
 			{
@@ -80,6 +72,56 @@ public class CheckCollisions : MonoBehaviour
 			Buster.SetActive(true);
         }
 	
+	}
+	void PlayerFinish(GameObject gameObject)
+    {
+		FinishScript finishScript = gameObject.gameObject.GetComponent<FinishScript>();
+		playerController.runningSpeed = 0f;
+		//	playerController.PlayerAnim.SetBool("win", true);
+		transform.Rotate(transform.rotation.x, 180, transform.rotation.z, Space.Self);
+		RestartPanel.SetActive(true);
+		GameManager.Instance.isGameEnding = true;
+		if (GameManager.Instance.isGameEnding)
+		{
+			if (GameManager.Instance.Timer < GameManager.Instance.HighScore || GameManager.Instance.HighScore == 0)
+			{
+				GameManager.Instance.HighScore = GameManager.Instance.Timer;
+				PlayerPrefs.SetFloat("HighScore", GameManager.Instance.HighScore);
+				
+				ActionReplay.Instiance.SetHighScore();
+                if (GameManager.Instance.highScoreIsTrue >=1)
+                {
+					GameManager.Instance.highScoreIsTrue = 2;
+                }
+                else
+                {
+					GameManager.Instance.highScoreIsTrue = 1;
+				}
+				
+				// high score un actıf olup olmadıgını kontrol etmek için 1 v 0 binary sayıları kullandık
+				PlayerPrefs.SetInt("HighScoreTrue",GameManager.Instance.highScoreIsTrue);
+				if(ActionReplay.Instiance.actionReplayRecordsSave.Capacity< ActionReplay.Instiance.actionReplayRecords.Count)
+                {
+					ActionReplay.Instiance.actionReplayRecordsSave.Capacity = ActionReplay.Instiance.actionReplayRecords.Count;
+				}
+				// ActionReplay.Instiance.isInReplayMode = true;
+				count = ActionReplay.Instiance.actionReplayRecords.Count;
+				PlayerPrefs.SetInt("Count", count);
+			}
+		}
+		if (finishScript.RunnerValue <= RunnerWinAmount)
+		{
+			PlayerAnim.SetBool("Win", true);
+			PlayerAnim.SetBool("Run", false);
+		}
+		else
+		{
+
+			PlayerAnim.SetBool("Lose", true);
+			PlayerAnim.SetBool("Run", false);
+		}
+		
+     
 	}
 
 	private void OnCollisionEnter(Collision collision)

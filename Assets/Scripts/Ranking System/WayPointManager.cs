@@ -15,6 +15,7 @@ public class WayPointManager : MonoBehaviour
 
     void Update()
     {
+
         ResetWaypoints();
     }
 

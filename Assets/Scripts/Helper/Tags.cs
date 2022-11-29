@@ -9,5 +9,7 @@ public class Tags : MonoBehaviour
     public static string Obstacle_tag = "obstacle";
     public static string Player_tag = "Player";
     public static string Agent_tag = "Ai";
+    public static string Runner_tag = "Runner";
+    public static string Ghost_tag = "Ghost";
 
 }

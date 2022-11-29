@@ -6,6 +6,7 @@ public class FinishScript : MonoBehaviour
 {
    
     public int RunnerValue;
+    private float timer = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -15,13 +16,17 @@ public class FinishScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       
+        timer += Time.deltaTime;
     }
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag==Tags.Player_tag|| other.gameObject.tag == Tags.Agent_tag)
+        if(other.gameObject.tag==Tags.Runner_tag)
         {
             RunnerValue++; 
+        }
+        if (other.gameObject.tag == Tags.Ghost_tag)
+        {
+            Debug.Log(timer);
         }
     }
 }

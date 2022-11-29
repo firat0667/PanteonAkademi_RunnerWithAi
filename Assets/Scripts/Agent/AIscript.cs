@@ -20,6 +20,7 @@ public class AIscript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
         NavMesh.SetDestination(Target.transform.position);
     }
     private void OnCollisionEnter(Collision collision)

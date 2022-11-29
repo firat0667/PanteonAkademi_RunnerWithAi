@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     public float runningSpeed;
     public float xSpeed;
     public float limitx;
+    public static PlayerController Instance;
 
     public Animator PlayerAnim;
     public GameObject Player;
@@ -14,6 +15,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         PlayerAnim = Player.GetComponentInChildren<Animator>();
+        Instance = this;
     }
 
     void SwipeCheck()
@@ -40,6 +42,7 @@ public class PlayerController : MonoBehaviour
     
     void Update()
     {
+
         SwipeCheck();
     }
 }
